@@ -28,7 +28,7 @@ deploy(){
       --no-fail-on-empty-changeset \
       --parameter-overrides \
       RealmName=${REALM} \
-      BucketName=${BUCKET_NAME} \
+      BucketName=${BUCKET_NAME}
 
       DISTRIBUTION_ID=$(aws --region ${REGION} cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='CloudFrontDistributionID'].OutputValue" --output text)
       aws --region ${REGION} s3 sync ../build s3://$EVENTS_UI_BUCKET_NAME --exclude README.md --exclude ".git/*" --exclude ".circleci/*" --acl public-read --delete
