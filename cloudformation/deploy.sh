@@ -17,7 +17,7 @@ deploy(){
 
   cd ../site
   npm install
-  npm build
+  npm run build
   ls
   cd ../cloudformation
   ls
@@ -30,9 +30,7 @@ deploy(){
       --parameter-overrides \
       RealmName=${REALM} \
       BucketName=${BucketName}
-
-  cd ../site
-  ls      
+   
   DISTRIBUTION_ID=$(aws --region ${REGION} cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='CloudFrontDistributionID'].OutputValue" --output text)
   aws --region ${REGION} s3 sync ../site/build s3://$BucketName --exclude README.md --exclude ".git/*" --exclude ".circleci/*" --acl public-read --delete
   aws --region ${REGION} cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths '/' '/\*'
