@@ -14,12 +14,8 @@ REGION="ap-south-1"
 CODE_ZIP="events-function.zip"
 
 deploy(){
-  rm ./events/cloudformation/${CODE_ZIP}
-  cd ./events/lambda/api
 
-  pip3 install -r ./requirements.txt --target ./
-  cp -r /root/LambdaCDDemo/events/lambda/dispatcher dispatcher
-  zip -r ../../cloudformation/${CODE_ZIP} .
+  cd ./site
 
   ls
   cd ../../cloudformation
