@@ -39,7 +39,7 @@ Resources:
       - EventsUIBucket
     Properties:
       DistributionConfig:
-        Comment: !Sub 'UI ${RealmName} ${Hostname}'
+        Comment: !Sub 'UI ${RealmName} ${BucketName}'
         PriceClass: PriceClass_200
         HttpVersion: http2
         Enabled: true
