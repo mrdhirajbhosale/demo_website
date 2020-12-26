@@ -13,7 +13,7 @@ test_dev_stack_deploy_steps: &test_dev_stack_deploy_steps
         name: Deploy Stack
         command: |
           cd ~/demo_website/cloudformation
-          sudo deploy.sh $INSTANCE
+          sh deploy.sh $INSTANCE
 
 
 version: 2.1
