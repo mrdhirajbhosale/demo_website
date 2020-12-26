@@ -15,10 +15,10 @@ CODE_ZIP="events-function.zip"
 
 deploy(){
 
-  cd ./site
+  cd ../site
 
   ls
-  cd ../../cloudformation
+  cd ../cloudformation
   ls
 
   aws --region ${REGION} cloudformation deploy \
