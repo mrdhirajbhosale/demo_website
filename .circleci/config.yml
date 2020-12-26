@@ -1,13 +1,57 @@
-# Use the latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
+test_dev_stack_deploy_steps: &test_dev_stack_deploy_steps
+  steps:
+    - run: echo "Triggering branch $TRIGGER_BRANCH"
+    - run: |
+        # these are all provided by circleci project settings > environment variables
+        echo "export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" >> $BASH_ENV
+        echo "export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" >> $BASH_ENV
+    - checkout
+    - attach_workspace:
+        at: ~/demo_website
+
+    - run:
+        name: Deploy Stack
+        command: |
+          cd ~/demo_website/cloudformation
+          ./sync.sh $INSTANCE
+
+
 version: 2.1
-# Use a package of configuration called an orb.
+
 orbs:
-  # Declare a dependency on the welcome-orb
-  welcome: circleci/welcome-orb@0.4.1
-# Orchestrate or schedule a set of jobs
+  node: circleci/node@4.1.0
+
+jobs:
+  deploy-test-dev:
+    working_directory: ~/demo_website
+    docker:
+      - image: futurestandard/scorer-cloud-deploy:1.2
+        environment:
+          AWS_REGION: ap-south-1
+          INSTANCE: preview
+    <<: *test_dev_stack_deploy_steps
+  deploy-test-dev-demo:
+    working_directory: ~/demo_website
+    docker:
+      - image: futurestandard/scorer-cloud-deploy:1.2
+        environment:
+          AWS_REGION: ap-northeast-1
+          INSTANCE: demo
+    <<: *test_dev_stack_deploy_steps
+  lint:
+    working_directory: ~/app
+    executor:
+      name: node/default
+      tag: '12.19'
+    steps:
+      - checkout
+      - node/install-packages:
+          cache-path: node_modules
+      - run:
+          command: npm run lint
+
 workflows:
-  # Name the workflow "welcome"
-  welcome:
-    # Run the welcome/run job in its own container
+  version: 2
+  build-and-deploy:
     jobs:
-      - welcome/run
+      - deploy-test-dev:

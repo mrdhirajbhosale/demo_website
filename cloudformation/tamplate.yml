@@ -1,0 +1,25 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: AWS CloudFormation template for events ui
+Transform: 'AWS::Serverless-2016-10-31'
+Parameters:
+  RealmName:
+    Default: dev
+    Type: String
+  BucketName:
+    Description: Hosted zone id for scorer.jp
+    Type: String
+
+Resources:
+  EventsUIBucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      AccessControl: PublicRead
+      BucketName: !Ref BucketName
+      WebsiteConfiguration:
+        IndexDocument: index.html
+
+Outputs:
+  EventsUIBucket:
+    Value: !Ref EventsUIBucket
+    Export:
+      Name: !Sub '${AWS::StackName}-EventsUIBucketName'
