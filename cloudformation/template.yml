@@ -17,6 +17,24 @@ Resources:
       BucketName: !Ref BucketName
       WebsiteConfiguration:
         IndexDocument: index.html
+        IndexDocument: index.html
+  BucketPolicy:
+SampleBucketPolicy:
+  Type: 'AWS::S3::BucketPolicy'
+  Properties:
+    Bucket: !Ref EventsUIBucket
+    PolicyDocument:
+      Statement:
+        - Action:
+            - 's3:GetObject'
+          Effect: Allow
+          Resource: !Join
+            - ''
+            - - 'arn:aws:s3:::'
+              - !Ref EventsUIBucket
+              - /*
+          Principal: '*'
+   
 
 Outputs:
   EventsUIBucket:
