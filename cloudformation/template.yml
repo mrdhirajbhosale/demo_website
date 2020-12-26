@@ -33,9 +33,63 @@ Resources:
                 - !Ref EventsUIBucket
                 - /*
             Principal: '*'
+CloudFrontDistribution:
+  Type: 'AWS::CloudFront::Distribution'
+  DependsOn:
+    - EventsUIBucket
+  Properties:
+    DistributionConfig:
+      Comment: !Sub 'UI ${RealmName} ${Hostname}'
+      PriceClass: PriceClass_200
+      HttpVersion: http2
+      Enabled: true
+      DefaultCacheBehavior:
+        ForwardedValues:
+          QueryString: false
+          Cookies:
+            Forward: none
+          Headers:
+            - Origin
+        TargetOriginId: !Join
+          - ''
+          - - Custom-
+            - !Ref EventsUIBucket
+            - .s3-website-
+            - !Ref 'AWS::Region'
+            - .amazonaws.com/
+        ViewerProtocolPolicy: redirect-to-https
+      CustomErrorResponses:
+        - ErrorCode: 403
+          ResponsePagePath: /index.html
+          ResponseCode: '200'
+          ErrorCachingMinTTL: 0
+        - ErrorCode: 404
+          ResponsePagePath: /index.html
+          ResponseCode: '200'
+          ErrorCachingMinTTL: 0
+      Origins:
+        - CustomOriginConfig:
+            OriginProtocolPolicy: http-only
+          DomainName: !Join
+            - ''
+            - - !Ref EventsUIBucket
+              - .s3-website-
+              - !Ref 'AWS::Region'
+              - .amazonaws.com
+          Id: !Join
+            - ''
+            - - Custom-
+              - !Ref EventsUIBucket
+              - .s3-website-
+              - !Ref 'AWS::Region'
+              - .amazonaws.com/
 
 Outputs:
   EventsUIBucket:
     Value: !Ref EventsUIBucket
     Export:
       Name: !Sub '${AWS::StackName}-EventsUIBucketName'
+  CloudFrontDistributionID:
+    Value: !Ref CloudFrontDistribution
+    Export:
+      Name: !Sub '${AWS::StackName}-DistributionID'
