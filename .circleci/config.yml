@@ -1,10 +1,27 @@
-test_dev_stack_deploy_steps: &test_dev_stack_deploy_steps
+stack_deploy_steps: &test_dev_stack_deploy_steps
   steps:
     - run: echo "Triggering branch $TRIGGER_BRANCH"
     - run: |
         # these are all provided by circleci project settings > environment variables
         echo "export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" >> $BASH_ENV
         echo "export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" >> $BASH_ENV
+    - checkout
+    - attach_workspace:
+        at: ~/demo_website
+
+    - run:
+        name: Deploy Stack
+        command: |
+          cd ~/demo_website/cloudformation
+          sh deploy.sh $INSTANCE
+
+demo_stack_deploy_steps: &test_dev_stack_deploy_steps
+  steps:
+    - run: echo "Triggering branch $TRIGGER_BRANCH"
+    - run: |
+        # these are all provided by circleci project settings > environment variables
+        echo "export AWS_ACCESS_KEY_ID=$DEMO_AWS_ACCESS_KEY_ID" >> $BASH_ENV
+        echo "export AWS_SECRET_ACCESS_KEY=$DEMO_AWS_SECRET_ACCESS_KEY" >> $BASH_ENV
     - checkout
     - attach_workspace:
         at: ~/demo_website
@@ -28,11 +45,31 @@ jobs:
       - image: futurestandard/scorer-cloud-deploy:1.2
         environment:
           AWS_REGION: ap-south-1
+          INSTANCE: main
+    <<: *stack_deploy_steps
+
+  deploy-test-dev:
+    working_directory: ~/demo_website
+    docker:
+      - image: futurestandard/scorer-cloud-deploy:1.2
+        environment:
+          AWS_REGION: ap-south-1
           INSTANCE: preview
-    <<: *test_dev_stack_deploy_steps
+    <<: *demo_stack_deploy_steps
 
 workflows:
   version: 2
   build-and-deploy:
     jobs:
       - deploy-test-dev
+      filters:
+        branches:
+          only:
+          - master
+  demo-build-and-deploy:
+    jobs:
+      - deploy-test-dev
+      filters:
+        branches:
+          only:
+          - preview
