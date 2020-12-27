@@ -1,4 +1,4 @@
-stack_deploy_steps: &test_dev_stack_deploy_steps
+stack_deploy_steps: &stack_deploy_steps
   steps:
     - run: echo "Triggering branch $TRIGGER_BRANCH"
     - run: |
