@@ -48,7 +48,7 @@ jobs:
           INSTANCE: main
     <<: *stack_deploy_steps
 
-  deploy-test-dev:
+  demo-deploy-test-dev:
     working_directory: ~/demo_website
     docker:
       - image: futurestandard/scorer-cloud-deploy:1.2
@@ -61,15 +61,14 @@ workflows:
   version: 2
   build-and-deploy:
     jobs:
-      - deploy-test-dev
-      filters:
-        branches:
-          only:
-          - master
-  demo-build-and-deploy:
-    jobs:
-      - deploy-test-dev
-      filters:
-        branches:
-          only:
-          - preview
+      - deploy-test-dev:
+          filters:
+            branches:
+              only:
+              - master
+
+      - demo-deploy-test-dev:
+          filters:
+            branches:
+              only:
+              - preview
