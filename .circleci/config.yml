@@ -12,7 +12,8 @@ test_dev_stack_deploy_steps: &test_dev_stack_deploy_steps
     - run:
         name: Deploy Stack
         command: |
-          sudo apt-get install aws-cli 
+          sudo apt-get install -y python-pip
+          sudo pip install awscli
           cd ~/demo_website/cloudformation
           sh deploy.sh $INSTANCE
 
