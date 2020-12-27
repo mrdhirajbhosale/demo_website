@@ -4,10 +4,10 @@ UUID=""
 STACK_NAME="demoWebSite"
 LAMBDA_VERSION="1.0"
 REALM="dev"
-INSTANCE="dev"
+INSTANCE=${INSTANCE}
 DEFAULT_PYTHON_RUNTIME="python3.8"
 CODE_S3_PREFIX=${NOW}
-BucketName="demo-web-page"
+BucketName="web-page-${INSTANCE}"
 REGION="ap-south-1"
 
 
