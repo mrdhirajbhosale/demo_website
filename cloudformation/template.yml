@@ -18,21 +18,7 @@ Resources:
       WebsiteConfiguration:
         IndexDocument: index.html
         IndexDocument: index.html
-  BucketPolicy:
-    Type: 'AWS::S3::BucketPolicy'
-    Properties:
-      Bucket: !Ref EventsUIBucket
-      PolicyDocument:
-        Statement:
-          - Action:
-              - 's3:GetObject'
-            Effect: Allow
-            Resource: !Join
-              - ''
-              - - 'arn:aws:s3:::'
-                - !Ref EventsUIBucket
-                - /*
-            Principal: '*'
+
   CloudFrontDistribution:
     Type: 'AWS::CloudFront::Distribution'
     DependsOn:
