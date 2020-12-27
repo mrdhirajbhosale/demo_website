@@ -15,7 +15,7 @@ stack_deploy_steps: &stack_deploy_steps
           cd ~/demo_website/cloudformation
           sh deploy.sh $INSTANCE
 
-demo_stack_deploy_steps: &test_dev_stack_deploy_steps
+demo_stack_deploy_steps: &demo_stack_deploy_steps
   steps:
     - run: echo "Triggering branch $TRIGGER_BRANCH"
     - run: |
