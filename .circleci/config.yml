@@ -12,8 +12,6 @@ test_dev_stack_deploy_steps: &test_dev_stack_deploy_steps
     - run:
         name: Deploy Stack
         command: |
-          sudo apt-get install -y python-pip
-          sudo pip install awscli
           cd ~/demo_website/cloudformation
           sh deploy.sh $INSTANCE
 
@@ -27,7 +25,7 @@ jobs:
   deploy-test-dev:
     working_directory: ~/demo_website
     docker:
-      - image: cimg/node:15.5.0
+      - image: futurestandard/scorer-cloud-deploy:1.2
         environment:
           AWS_REGION: ap-south-1
           INSTANCE: preview
