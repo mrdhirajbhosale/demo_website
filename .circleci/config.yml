@@ -25,7 +25,7 @@ jobs:
   deploy-test-dev:
     working_directory: ~/demo_website
     docker:
-      - image: cimg/python:2.7.1-node
+      - image: cimg/node:15.5.0
         environment:
           AWS_REGION: ap-south-1
           INSTANCE: preview
