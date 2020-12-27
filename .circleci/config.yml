@@ -12,7 +12,7 @@ test_dev_stack_deploy_steps: &test_dev_stack_deploy_steps
     - run:
         name: Deploy Stack
         command: |
-          sudo yum -y install aws-cli 
+          sudo apt-get install aws-cli 
           cd ~/demo_website/cloudformation
           sh deploy.sh $INSTANCE
 
