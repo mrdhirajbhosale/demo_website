@@ -25,7 +25,7 @@ jobs:
   deploy-test-dev:
     working_directory: ~/demo_website
     docker:
-      - image: futurestandard/scorer-cloud-deploy:1.2
+      - image: alpine3.10
         environment:
           AWS_REGION: ap-south-1
           INSTANCE: preview
