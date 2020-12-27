@@ -12,7 +12,7 @@ test_dev_stack_deploy_steps: &test_dev_stack_deploy_steps
     - run:
         name: Deploy Stack
         command: |
-          npm install aws-console
+          npm install aws-cli
           cd ~/demo_website/cloudformation
           sh deploy.sh $INSTANCE
 
